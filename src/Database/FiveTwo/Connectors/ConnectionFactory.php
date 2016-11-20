@@ -1,8 +1,8 @@
 <?php
 
-namespace Aejnsn\Postgresify\Database\Connectors;
+namespace Aejnsn\Postgresify\Database\FiveTwo\Connectors;
 
-use Aejnsn\Postgresify\Database\PostgresConnection;
+use Aejnsn\Postgresify\Database\FiveTwo\PostgresConnection;
 use Illuminate\Database\Connectors\ConnectionFactory as BaseConnectionFactory;
 use PDO;
 

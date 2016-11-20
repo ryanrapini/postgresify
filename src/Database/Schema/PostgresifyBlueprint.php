@@ -2,32 +2,10 @@
 
 namespace Aejnsn\Postgresify\Database\Schema;
 
-use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Database\Schema\Blueprint;
 
-class Blueprint extends BaseBlueprint
+class PostgresifyBlueprint extends Blueprint
 {
-    /**
-     * Create a new IPv4/IPv6 address (inet) column on the table.
-     *
-     * @param  string  $column
-     * @return \Illuminate\Support\Fluent
-     */
-    public function ipAddress($column)
-    {
-        return $this->addColumn('ipAddress', $column);
-    }
-
-    /**
-     * Create a new MAC address (macaddr) column on the table.
-     *
-     * @param  string  $column
-     * @return \Illuminate\Support\Fluent
-     */
-    public function macAddress($column)
-    {
-        return $this->addColumn('macAddress', $column);
-    }
-
     /**
      * Create a new netmask (CIDR-notation) (cidr) column on the table.
      *
@@ -38,7 +16,6 @@ class Blueprint extends BaseBlueprint
     {
         return $this->addColumn('netmask', $column);
     }
-
 
     /**
      * Create a new box column on the table.
@@ -117,7 +94,6 @@ class Blueprint extends BaseBlueprint
         return $this->addColumn('polygon', $column);
     }
 
-
     /**
      * Create a new big (64-bit) integer range (int8) column on the table.
      *
@@ -183,7 +159,6 @@ class Blueprint extends BaseBlueprint
     {
         return $this->addColumn('timestampTimezoneRange', $column);
     }
-
 
     /**
      * Create a new money column on the table.
