@@ -1,5 +1,5 @@
 {
-    "name": "aejnsn/postgresify",
+    "name": "martimarkov/postgresify",
     "description": "Extended PostgreSQL Functionality for Laravel",
     "keywords": ["postgresql", "pgsql", "laravel", "lumen", "types"],
     "license": "MIT",
