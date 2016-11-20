@@ -99,4 +99,24 @@ abstract class RangeType extends AbstractType
         $this->upperBoundInclusive = $inclusive;
         $this->upperBound = $value;
     }
+
+    /**
+     * Sets the lower inclusive bound of the range.
+     *
+     * @param $value
+     */
+    protected function setLowerBoundInclusive($value)
+    {
+        $this->setLowerBound($value, true);
+    }
+
+    /**
+     * Sets the upper inclusive bound of the range.
+     *
+     * @param $value
+     */
+    protected function setUpperBoundInclusive($value)
+    {
+        $this->setUpperBound($value, true);
+    }
 }
