@@ -31,9 +31,9 @@ abstract class RangeType extends AbstractType
      */
     public function __toString()
     {
-        return $this->lowerBoundInclusive ? '[' : '(' .
+        return ($this->lowerBoundInclusive ? '[' : '(') .
         $this->lowerBound . ',' . $this->upperBound .
-        $this->upperBoundInclusive ? ']' : ')';
+        ($this->upperBoundInclusive ? ']' : ')');
     }
 
     /**
