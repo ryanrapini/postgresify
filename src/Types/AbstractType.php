@@ -24,10 +24,10 @@ abstract class AbstractType
     public function __get($name)
     {
         $method = camel_case('get_' . $name);
-        if (method_exists($this, $method)) {
-            return $this->$method();
+        if (!method_exists($this, $method)) {
+            throw new Exception("Property {$name} does not exist.");
         }
-        throw new Exception("Property {$name} does not exist.");
+        return $this->$method();
     }
 
     /**
@@ -42,9 +42,9 @@ abstract class AbstractType
     public function __set($name, $value)
     {
         $method = camel_case('set_' . $name);
-        if (method_exists($this, $method)) {
-            $this->$method($value);
+        if (!method_exists($this, $method)) {
+            throw new Exception("Property {$name} does not exist.");
         }
-        throw new Exception("Property {$name} does not exist.");
+        $this->$method($value);
     }
 }
