@@ -5,6 +5,10 @@
     "license": "MIT",
     "authors": [
         {
+            "name": "Marti Markov",
+            "email": "marti.markov@icloud.com"
+        },
+        {
             "name": "Aaron Johnson",
             "email": "aaron@aejnsn.com"
         }
