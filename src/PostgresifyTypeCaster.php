@@ -10,7 +10,7 @@ class PostgresifyTypeCaster
 {
     public function cast($name, $value, $typeInformation)
     {
-        $castMethod = camel_case('cast_' . $name);
+        $castMethod = camel_case('cast_' . $typeInformation['type']);
         if (method_exists($this, $castMethod)) {
             return $this->$castMethod($value);
         }
