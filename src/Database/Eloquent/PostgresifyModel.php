@@ -4,6 +4,7 @@ namespace Aejnsn\Postgresify\Database\Eloquent;
 
 use Aejnsn\Postgresify\PostgresifyTypeCaster;
 use Illuminate\Database\Eloquent\Model;
+use Smiarowski\Postgres\Model\Traits\PostgresArray;
 
 class PostgresifyModel extends Model
 {
@@ -16,8 +17,8 @@ class PostgresifyModel extends Model
     public function setAttribute($key, $value)
     {
         if (in_array($key, array_keys($this->postgresifyCasts))) {
-	    if (!is_object($value) && in_array($this->postgresifyCasts[$key]['type'], $this->postgresifyPrimitiveCasts) {
-		$value = self::mutateToPgArray($value);
+	    if (!is_object($value) && in_array($this->postgresifyCasts[$key]['type'], $this->postgresifyPrimitiveCasts)) {
+		    $value = self::mutateToPgArray($value);
 	    }
 	}
         return parent::setAttribute($key, $value);
@@ -28,8 +29,8 @@ class PostgresifyModel extends Model
         $value = parent::getAttributeValue($key);
 
         if (!is_null($value) && in_array($key, array_keys($this->postgresifyCasts))) {
-	    if (in_array($this->postgresifyCasts[$key]['type'], $this->postgresifyPrimitiveCasts) {
-		return self::accessPgArray($value);
+	    if (in_array($this->postgresifyCasts[$key]['type'], $this->postgresifyPrimitiveCasts)) {
+		    return self::accessPgArray($value);
 	    }
             $postgresifyTypeCaster = new PostgresifyTypeCaster();
             return $postgresifyTypeCaster->cast(
@@ -42,3 +43,4 @@ class PostgresifyModel extends Model
         return $value;
     }
 }
+
