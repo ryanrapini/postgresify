@@ -3,6 +3,8 @@
 namespace Aejnsn\Postgresify\Database\Eloquent;
 
 use Aejnsn\Postgresify\PostgresifyTypeCaster;
+use Aejnsn\Postgresify\Types\IntegerRange;
+use Aejnsn\Postgresify\Types\NumericRange;
 use Illuminate\Database\Eloquent\Model;
 use Smiarowski\Postgres\Model\Traits\PostgresArray;
 
@@ -10,37 +12,45 @@ class PostgresifyModel extends Model
 {
     use PostgresArray;
 
-    protected $postgresifyCasts = [];
-
-    protected $postgresifyPrimitiveCasts = ['array'];
-
     public function setAttribute($key, $value)
     {
-        if (in_array($key, array_keys($this->postgresifyCasts))) {
-	    if (!is_object($value) && in_array($this->postgresifyCasts[$key]['type'], $this->postgresifyPrimitiveCasts)) {
-		    $value = self::mutateToPgArray($value);
-	    }
-	}
+        if ($this->hasCast($key)) {
+            switch ($this->getCastType($key)) {
+                case 'array':
+                    $value = self::mutateToPgArray($value);
+                    break;
+            }
+        }
         return parent::setAttribute($key, $value);
     }
 
-    public function getAttributeValue($key)
+    protected function castAttribute($key, $value)
     {
-        $value = parent::getAttributeValue($key);
-
-        if (!is_null($value) && in_array($key, array_keys($this->postgresifyCasts))) {
-	    if (in_array($this->postgresifyCasts[$key]['type'], $this->postgresifyPrimitiveCasts)) {
-		    return self::accessPgArray($value);
-	    }
-            $postgresifyTypeCaster = new PostgresifyTypeCaster();
-            return $postgresifyTypeCaster->cast(
-                $key,
-                $value,
-                $this->postgresifyCasts[$key]
-            );
+        if (is_null($value)) {
+            return $value;
         }
-        
-        return $value;
+
+        switch ($this->getCastType($key)) {
+            case 'array':
+                return self::accessPgArray($value);
+            case 'numericrange':
+                return (new NumericRange(0, 0))->fromPgValues($value);
+            case 'integerrange':
+                return (new IntegerRange(0, 0))->fromPgValues($value);
+        }
+
+        return parent::castAttribute($key, $value);
+    }
+
+    /**
+     * Override to exclude array as JSON castable.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    protected function isJsonCastable($key)
+    {
+        return $this->hasCast($key, ['json', 'object', 'collection']);
     }
 }
 

@@ -4,25 +4,31 @@ namespace Aejnsn\Postgresify\Types;
 
 abstract class RangeType extends AbstractType
 {
+
     /**
      * @var mixed The lower bound value.
      */
     protected $lowerBound;
-
     /**
      * @var bool Whether the lower bound value is inclusive.
      */
     protected $lowerBoundInclusive;
-
     /**
      * @var mixed The upper bound value.
      */
     protected $upperBound;
-
     /**
      * @var bool Whether the upper bound value is inclusive.
      */
     protected $upperBoundInclusive;
+
+    public function __construct($lowerBound, $upperBound, $lowerBoundInclusive = true, $upperBoundInclusive = true)
+    {
+        $this->lowerBound = $lowerBound;
+        $this->upperBound = $upperBound;
+        $this->lowerBoundInclusive = $lowerBoundInclusive;
+        $this->upperBoundInclusive = $upperBoundInclusive;
+    }
 
     /**
      * Output the type to a string, in the PostgreSQL preferred format.
@@ -32,8 +38,39 @@ abstract class RangeType extends AbstractType
     public function __toString()
     {
         return ($this->lowerBoundInclusive ? '[' : '(') .
-        $this->lowerBound . ',' . $this->upperBound .
-        ($this->upperBoundInclusive ? ']' : ')');
+            $this->lowerBound . ',' . $this->upperBound .
+            ($this->upperBoundInclusive ? ']' : ')');
+    }
+
+    public function fromPgValues($pgValue)
+    {
+        if (empty($pgValue)
+            || ($pgValue[0] != '[' && $pgValue[0] != '(')
+            || ($pgValue[strlen($pgValue) - 1] != ']' && $pgValue[strlen($pgValue) - 1] != ')')
+        ) {
+            throw new \Exception("Not valid Postgres numrange data - bounds");
+        }
+        if ($pgValue[0] == '[') {
+            $this->lowerBoundInclusive = true;
+        } else {
+            $this->lowerBoundInclusive = false;
+        }
+
+        if ($pgValue[strlen($pgValue) - 1] == ']') {
+            $this->upperBoundInclusive = true;
+        } else {
+            $this->upperBoundInclusive = false;
+        }
+
+        $values = explode(',', substr($pgValue, 1, -1));
+
+        if (count($values) != 2) {
+            throw new \Exception("Not valid Postgres numrange data - values");
+        }
+        $this->lowerBound = $values[0];
+        $this->upperBound = $values[1];
+
+        return $this;
     }
 
     /**
@@ -47,33 +84,13 @@ abstract class RangeType extends AbstractType
     }
 
     /**
-     * Return boolean as to whether the upper bound is inclusive.
-     *
-     * @return mixed
-     */
-    protected function getIsUpperBoundInclusive()
-    {
-        return $this->upperBoundInclusive;
-    }
-
-    /**
      * Returns the range's lower bound.
      *
      * @return mixed
      */
     protected function getLowerBound()
     {
-        return $this->lowerBound;
-    }
-
-    /**
-     * Returns the range's upper bound.
-     *
-     * @return mixed
-     */
-    protected function getUpperBound()
-    {
-        return $this->upperBound;
+        return $this->lowerBound - 0;
     }
 
     /**
@@ -89,6 +106,16 @@ abstract class RangeType extends AbstractType
     }
 
     /**
+     * Returns the range's upper bound.
+     *
+     * @return mixed
+     */
+    protected function getUpperBound()
+    {
+        return ($this->getIsUpperBoundInclusive()) ? $this->upperBound : ($this->upperBound - 1);
+    }
+
+    /**
      * Sets the upper bound of the range.
      *
      * @param $value
@@ -98,6 +125,16 @@ abstract class RangeType extends AbstractType
     {
         $this->upperBoundInclusive = $inclusive;
         $this->upperBound = $value;
+    }
+
+    /**
+     * Return boolean as to whether the upper bound is inclusive.
+     *
+     * @return mixed
+     */
+    protected function getIsUpperBoundInclusive()
+    {
+        return $this->upperBoundInclusive;
     }
 
     /**

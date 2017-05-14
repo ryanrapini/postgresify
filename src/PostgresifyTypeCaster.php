@@ -3,6 +3,7 @@
 namespace Aejnsn\Postgresify;
 
 use Aejnsn\Postgresify\Types\Circle;
+use Aejnsn\Postgresify\Types\NumericRange;
 use Aejnsn\Postgresify\Types\Point;
 use Exception;
 
@@ -12,7 +13,7 @@ class PostgresifyTypeCaster
     {
         $castMethod = camel_case('cast_' . $typeInformation['type']);
         if (method_exists($this, $castMethod)) {
-            return $this->$castMethod($value);
+            return $this->$castMethod($value, $typeInformation);
         }
         throw new Exception("Cast to non-existent type {$name}");
     }
@@ -87,7 +88,6 @@ class PostgresifyTypeCaster
 
     protected function castNumericRange($value, $typeInformation)
     {
-
     }
 
     protected function castTimestampRange($value, $typeInformation)
