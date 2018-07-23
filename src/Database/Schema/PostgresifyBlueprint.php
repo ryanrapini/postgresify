@@ -73,17 +73,6 @@ class PostgresifyBlueprint extends Blueprint
     }
 
     /**
-     * Create a new point column on the table.
-     *
-     * @param  string  $column
-     * @return \Illuminate\Support\Fluent
-     */
-    public function point($column)
-    {
-        return $this->addColumn('point', $column);
-    }
-
-    /**
      * Create a new polygon column on the table.
      *
      * @param  string  $column
