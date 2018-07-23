@@ -1,5 +1,5 @@
 {
-    "name": "martimarkov/postgresify",
+    "name": "ryanrapini/postgresify",
     "description": "Extended PostgreSQL Functionality for Laravel",
     "keywords": ["postgresql", "pgsql", "laravel", "lumen", "types"],
     "license": "MIT",
@@ -11,6 +11,10 @@
         {
             "name": "Aaron Johnson",
             "email": "aaron@aejnsn.com"
+        },
+        {
+            "name": "Ryan Rapini",
+            "email": "ryanrapini@gmail.com"
         }
     ],
     "require": {
