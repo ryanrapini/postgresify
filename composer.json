@@ -18,9 +18,9 @@
         }
     ],
     "require": {
-        "php": "^7.2",
-        "illuminate/database": "^7.22",
-        "illuminate/support": "^7.22",
+        "php": "^7.3",
+        "illuminate/database": "^8.21",
+        "illuminate/support": "^8.21",
         "asmiarowski/laravel-postgres": "dev-master"
     },
     "require-dev": {
